@@ -34,11 +34,11 @@ app.get("/", function (req, res) {
     if (result.length === 0) {
       res.render("emptyPage");
     } else {
-      res.json(result);
+      res.status(200).json(result);
     }
   });
 });
 
 app.listen(5001, function () {
-  console.log("Server started successfully at port:5001!");
+  console.log("Server started successfully at port: 5001!");
 });
