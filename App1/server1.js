@@ -51,6 +51,17 @@ app.get("/", function (req, res) {
     });
 });
 
+app.get("/data", function (req, res) {
+  Customer.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+    res.json(results);
+    }
+  });
+     
+});
+
 app.post("/", function (req, res) {
     //redirect to different routes after post request from here rather than making new post requests app.post
     const Customers_ID = req.body.Customer_ID;

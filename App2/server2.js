@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+const fetch = require('node-fetch');
 
 const app = express();
 
@@ -9,26 +9,32 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://sumitramkr:Sumi123@sumi1.joel8sy.mongodb.net/?retryWrites=true&w=majority", {
-  useNewUrlParser: true,
-});
+async function getUser() {
+  try {
+    var startTime = (new Date()).getTime();
+    const response = await fetch('http://localhost:3001/data');
+    if (!response.ok) {
+      throw new Error(`Error! status: ${response.status}`);
+    }
 
-const customerSchema = new mongoose.Schema({
-  Customer_ID: String,
-  Customer_First_Name: String,
-  Customer_Last_Name: String,
-  Customer_Mobile: Number,
-  Customer_Email: String,
-});
+    const result = await response.json();
+    var endTime = (new Date()).getTime();
+    console.log("Took " + (endTime - startTime) + " ms");
+    return result;
 
-const Customer = mongoose.model("Customer", customerSchema);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+getUser();
 
 app.get("/", function (req, res) {
-  Customer.find({}, function (err, results) {
-    if (results.length === 0) {
+  getUser().then(result => { 
+    if (result.length === 0) {
       res.render("emptyPage");
     } else {
-      res.render("show", { newCustomers: results });
+      res.json(result);
     }
   });
 });
