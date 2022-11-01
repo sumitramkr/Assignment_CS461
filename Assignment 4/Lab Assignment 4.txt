@@ -1,0 +1,1 @@
+As discussed in the last lecture, In this lab, you need to implement the Gossip program (Simple chat/messaging program) by using RMI. Submit your code along with a report explaining your code.
